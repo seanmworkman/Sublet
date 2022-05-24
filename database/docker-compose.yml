@@ -1,0 +1,17 @@
+version: "3"
+
+volumes:
+  db:
+
+services:
+  db:
+    image: orientdb:2.2.26
+    hostname: db
+    environment:
+      - ORIENTDB_ROOT_PASSWORD=root
+    ports:
+      - "2424:2424"
+      - "2434:2434"
+      - "2480:2480"
+    volumes:
+      - db:/orientdb/databases

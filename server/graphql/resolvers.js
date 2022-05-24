@@ -1,13 +1,15 @@
 // Imported loaders 
 const { 
-    users
+    users,
+    getAllUsers
   } = require('./loaders');
   
   // All resolvers used for queries/mutations 
   const resolvers = {
     
     Query: {
-      users
+      users,
+      getAllUsers
     }
     
   };

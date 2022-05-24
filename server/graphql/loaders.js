@@ -2,6 +2,18 @@ const _ = require("lodash");
 
 const axios = require('axios');
 
+const OrientDBClient = require("orientjs").OrientDBClient;
+
+const { 
+  createConnectionPool,
+  closeConnectionPool
+} = require('../database/connection');
+
+const getDbConnection = async () => {
+  let pool = await createConnectionPool();
+  let session = await pool.acquire();
+  return session;
+}
 
 const userFriendlyUnexpectedError = () => {
   return new Error("An unexpected error occurred");
@@ -26,4 +38,21 @@ const users = async () => {
   }
 }
 
+const getAllUsers = async () => {
+  try {
+    let db = await getDbConnection();
+    let userQuery = "SELECT first_name, last_name, phone, email FROM User"
+    let result = await db.query(userQuery).all();
+
+    console.log(result);
+
+    db.close();
+    return result;
+  } catch (err) {
+    userFriendlyUnexpectedError();
+    logError(err);
+  }
+}
+
 module.exports.users = users;
+module.exports.getAllUsers = getAllUsers;

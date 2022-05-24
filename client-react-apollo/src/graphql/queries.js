@@ -8,7 +8,18 @@ export const GET_USERS = gql`
       avatar_url
     }
   }
-`
+`;
+
+export const GET_ALL_USERS = gql`
+  query {
+    getAllUsers {
+      first_name
+      last_name
+      phone
+      email
+    }
+  }
+`;
 
 export const READ_USER_LOGIN = gql`
   query ReadUserLogin($id: String!) {
