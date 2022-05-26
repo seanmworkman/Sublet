@@ -6,32 +6,42 @@ import React, { Component } from 'react';
 import ApolloClient from "apollo-boost";
 // import { InMemoryCache, ApolloClient } from '@apollo/client';
 import {
+  GET_ALL_PLACES_WITH_SPECS,
   GET_ALL_USERS
 } from "../graphql/queries.js"
 
+import { 
+  Card, CardBody,
+  Button,
+} from 'reactstrap';
+
 import _ from "lodash";
 
-import { MapContainer, TileLayer, Popup, Marker } from 'react-leaflet'
+import NavBar from '../components/NavBar.js';
+
+import Footer from '../components/Footer.js';
+
+// import { MapContainer, TileLayer, Popup, Marker } from 'react-leaflet'
 
 let client;
 client = new ApolloClient({
   uri: "http://127.0.0.1:4000/graphql"
 });
 
-const position = [51.505, -0.09]
-
  class Landing extends Component {
     constructor(props) {
       super(props);
   
       this.state = {
-        result: []
+        users: [],
+        places: []
       };
-    }  
+    }
   
     componentDidMount() {
       window.scrollTo(0, 0);
       this.getAllUsers();
+      this.getAllPlaces();
     }
 
     getAllUsers = async () => {
@@ -41,8 +51,24 @@ const position = [51.505, -0.09]
           fetchPolicy: 'network-only'
         });
         this.setState({
-          result: res.data.getAllUsers
+          users: res.data.getAllUsers
         });
+        console.log(res.data.getAllUsers);
+      } catch (err) {
+        console.log(JSON.stringify(err, null, 2));
+      }
+    }
+
+    getAllPlaces = async () => {
+      try {
+        let res = await client.query({
+          query: GET_ALL_PLACES_WITH_SPECS,
+          fetchPolicy: 'network-only'
+        });
+        this.setState({
+          places: res.data.getAllPlacesWithSpecs
+        });
+        console.log(res.data.getAllPlacesWithSpecs);
       } catch (err) {
         console.log(JSON.stringify(err, null, 2));
       }
@@ -50,33 +76,38 @@ const position = [51.505, -0.09]
   
     render() {
       return (
-        <div>
-            This is a blank landing page
-            {/* {_.isEmpty(this.state.result) ? null : 
-              <div>
-                {this.state.result.map((key) => {
+        <div>            
+          <div id="container">
+            <NavBar />
+            
+            {this.state.places[0] != undefined ? (
+              <>
+                {this.state.places.map(key => {
                   return (
-                    <div>
-                      {this.state.result[key].first_name}
-                      {this.state.result[key].last_name}
-                    </div>
+                    <Card>
+                      <CardBody>
+                        {this.state.places[key].address_line1}<br />
+                        {this.state.places[key].address_line2}<br />
+                        {this.state.places[key].city},
+                        {this.state.places[key].state}
+                        {this.state.places[key].zip_code}
+                        Specs:<br />
+                        {this.state.places[key].sqrft} sqrft<br />
+                        {this.state.places[key].bedrooms} bedrooms<br />
+                        {this.state.places[key].bathrooms} bathrooms<br />
+                        <h3>${this.state.places[key].price}</h3>
+                        <Button>
+                          Button
+                        </Button>
+                      </CardBody>
+                    </Card>
                   )
                 })}
-              </div>
-            } */}
-          <div style={{ height: '5%', marginTop: '5%', textAlign: "center", display: 'flex' }}>
-            <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={position}>
-                <Popup>
-                  A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-              </Marker>
-            </MapContainer>
+              </>
+            ) : null}
+
           </div>
+          <Footer />
         </div>
       );
     }

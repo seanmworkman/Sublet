@@ -1,0 +1,20 @@
+.section1Team {
+    margin-right: 28%;
+    margin-left: 28%;
+    margin-top: 5%;
+    height: 100%;
+    text-align: center;
+}
+
+.rouded {
+    width: 150;
+    height: 150;
+    border-radius: 150 / 2;
+    overflow: hidden;
+    border-width: 3;
+}
+
+.bioButton {
+    background-color: white;
+    border: white;
+}

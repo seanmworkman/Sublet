@@ -1,0 +1,174 @@
+#container {
+    height: calc(99vh + 5px);
+}
+
+#upper {
+    height: 50%;
+    border-bottom: 2px solid lightgrey;
+    padding-bottom: 45px;
+}
+
+#upper-left {
+    height: 100%;
+    width: 50%;
+    float: left;
+    position: relative;
+
+    border-right: 2px solid lightgrey;
+}
+
+#upper-right {
+    height: 100%;
+    width: 50%;
+    float: right;
+    position: relative;
+}
+
+#lower {
+    height: 50%;
+    position: relative;
+}
+
+.right {
+    height: 100%;
+    width: 50%;
+    padding-left: 20px;
+    float: right;
+}
+
+.left {
+    height: 100%;
+    width: 50%;
+    padding-right: 20px;
+    float: left;
+}
+
+#container .card {
+    height: 80%;
+    width: 75%;
+    /* position: absolute; */
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.section1 {
+    margin-right: 15%;
+    margin-left: 15%;
+    margin-top: 5%;
+    height: 100%;
+}
+
+.section2 {
+    background-color: #093782;
+    width: 100%;
+    height: 25%;
+    margin-top: 0px;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.right2 {
+    width: 50%;
+    padding-left: 20px;
+    float: right;
+    text-align: center;
+    display: flex;
+    padding-top: 5%;
+    justify-content: center;
+}
+
+.left2 {
+    height: 100%;
+    width: 50%;
+    padding-right: 20px;
+    float: left;
+    color: white;
+    font-size: 20px;
+    padding-top: 2%;
+}
+
+.section3 {
+    width: 100%;
+    height: 100%;
+    margin-top: 0px;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.right3 {
+    width: 75%;
+    padding-left: 20px;
+    float: right;
+    text-align: center;
+    display: flex;
+    padding-top: 5%;
+    justify-content: center;
+    padding-right: 10%;
+}
+
+.left3 {
+    width: 25%;
+    padding-right: 20px;
+    float: left;
+    padding-top: 5%;
+}
+
+.section4 {
+    margin-right: 15%;
+    margin-left: 15%;
+    margin-top: 5%;
+    height: 45%;
+    text-align: center;
+    color: grey;
+}
+
+
+
+/* Table {
+    position: absolute;
+    border: 1px solid black;
+    width: 95%;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+} */
+
+/* th, td, tr {
+  border: 1px solid black;
+  text-align: left;
+  padding: 8px;
+} */
+
+#container h2 {
+    text-align: center;
+}
+
+.dropleft .dropdown-menu {
+    min-width: 60px;
+    width: 60px !important;
+
+}
+
+.dropdown-menu .dropdown-item {
+    width: 60px;
+}
+
+#recent-sg{
+    height: 88%;
+    width: 45%;
+    float: left;
+    border-right: 2px solid lightgrey;
+}
+
+#issues{
+    height: 88%;
+    width: 55%;
+    float: right;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-wrap: nowrap;
+    padding-left: 20px;
+}

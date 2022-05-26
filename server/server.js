@@ -1,8 +1,7 @@
-const { ApolloServer, gql } = require("apollo-server")
-const axios = require("axios")
+import { ApolloServer, gql } from "apollo-server";
 
-const { typeDefs } = require('./graphql/schema.js');
-const { resolvers } = require('./graphql/resolvers.js');
+import { typeDefs } from './graphql/schema.js';
+import { resolvers } from './graphql/resolvers.js';
 
 const server = new ApolloServer({
   typeDefs,

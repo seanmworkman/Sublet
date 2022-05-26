@@ -1,17 +1,18 @@
 // Imported loaders 
-const { 
+import { 
     users,
-    getAllUsers
-  } = require('./loaders');
+    getAllUsers,
+    getAllPlacesWithSpecs
+  } from './loaders.js';
   
   // All resolvers used for queries/mutations 
-  const resolvers = {
+  export const resolvers = {
     
     Query: {
       users,
-      getAllUsers
+      getAllUsers,
+      getAllPlacesWithSpecs
     }
     
   };
   
-  module.exports.resolvers = resolvers;

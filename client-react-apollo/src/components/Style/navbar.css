@@ -1,0 +1,59 @@
+.header {
+  margin-top: -16px;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+}
+
+.top {
+  top: 0;
+}
+
+.sublet-navbar {
+    height: 7vh;
+    list-style-type: none;
+    margin: 0, 0, 0, 0;
+    padding: 0, 0, 0, 0;
+    overflow: visible;
+    background-color: #093782;
+  } 
+  
+  img {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .sublet-navbar-item {
+    height: 100%;
+    float: left;
+  }
+  
+  .sublet-navbar-item-2 {
+    height: 100%;
+    float: left;
+    padding-left: 30px;
+  }
+  
+  .b1 {
+    height: 100%;
+    width: 100%;
+    background-color: #093782;
+  
+    font-style: normal;
+    font-weight: 700;
+    line-height: 16px;
+    text-align: center;
+    letter-spacing: 1.125px;
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+  
+    border: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: 0px;
+  }
+  
+  button:hover {
+    color: #1F5D8B;
+  }

@@ -1,9 +1,7 @@
-const OrientDB = require('orientjs');
-const md5 = require("blueimp-md5");
-const OrientDBClient = require("orientjs").OrientDBClient;
-const {
-   ridToString
-} = require('./dbUtils');
+import md5 from "blueimp-md5";
+import pkg from 'orientjs';
+const { OrientDBClient } = pkg;
+import { ridToString } from './dbUtils.js';
 
 let places = [
    {
@@ -210,46 +208,185 @@ let specs = [
    {
       sqrft: "700",
       bedrooms: "2",
-      bathrooms: "1.5"
+      bathrooms: "1.5",
+      price: "2500"
    },
    {
       sqrft: "2700",
       bedrooms: "4",
-      bathrooms: "5.5"
+      bathrooms: "5.5",
+      price: "2500"
    },
    {
       sqrft: "1200",
       bedrooms: "3",
-      bathrooms: "3"
+      bathrooms: "3",
+      price: "2500"
    },
    {
       sqrft: "1500",
       bedrooms: "4",
-      bathrooms: "3.5"
+      bathrooms: "3.5",
+      price: "2500"
    },
    {
       sqrft: "4000",
       bedrooms: "5",
-      bathrooms: "5"
+      bathrooms: "5",
+      price: "2500"
    },
    {
       sqrft: "5000",
       bedrooms: "6",
-      bathrooms: "5.5"
+      bathrooms: "5.5",
+      price: "2500"
    },
    {
       sqrft: "4500",
       bedrooms: "4",
-      bathrooms: "4.5"
+      bathrooms: "4.5",
+      price: "2500"
    },
    {
       sqrft: "900",
       bedrooms: "2",
-      bathrooms: "2"
+      bathrooms: "2",
+      price: "2500"
    }
 ];
 
-openDbConnection = async () => {
+let descriptions = [
+   {
+      blurb: `
+         Lorem ipsum dolor sit amet, an mutat fastidii vim. His ea quot mandamus 
+         dignissim, sed dolore euismod suavitate ei. Verterem pertinax id vis, 
+         qui at albucius suscipit. Vim alienum complectitur ad. Nec feugait 
+         accumsan definitionem ut.
+         Eum no noster facilis, usu cu partem postea appetere, summo liber ius ei. 
+         Omnesque laboramus nam ne, ne vix nibh eros vidisse. Vim partem ignota et. 
+         In mea novum alterum noluisse, in sit sumo zril soluta, tale nonumy indoctum 
+         nam ne. No evertitur persecuti deterruisset est. No vel vivendum accusamus 
+         adversarium, eos vide ipsum eu. Diam tritani adversarium vim ex, ut ius docendi sententiae.
+      `,
+      move_in_date: "5/28/2022",
+      duration: "365",
+      home_type: "Apartment"
+   },
+   {
+      blurb: `
+         Lorem ipsum dolor sit amet, an mutat fastidii vim. His ea quot mandamus 
+         dignissim, sed dolore euismod suavitate ei. Verterem pertinax id vis, 
+         qui at albucius suscipit. Vim alienum complectitur ad. Nec feugait 
+         accumsan definitionem ut.
+         Eum no noster facilis, usu cu partem postea appetere, summo liber ius ei. 
+         Omnesque laboramus nam ne, ne vix nibh eros vidisse. Vim partem ignota et. 
+         In mea novum alterum noluisse, in sit sumo zril soluta, tale nonumy indoctum 
+         nam ne. No evertitur persecuti deterruisset est. No vel vivendum accusamus 
+         adversarium, eos vide ipsum eu. Diam tritani adversarium vim ex, ut ius docendi sententiae.
+      `,
+      move_in_date: "8/1/2022",
+      duration: "152",
+      home_type: "House"
+   },
+   {
+      blurb: `
+         Lorem ipsum dolor sit amet, an mutat fastidii vim. His ea quot mandamus 
+         dignissim, sed dolore euismod suavitate ei. Verterem pertinax id vis, 
+         qui at albucius suscipit. Vim alienum complectitur ad. Nec feugait 
+         accumsan definitionem ut.
+         Eum no noster facilis, usu cu partem postea appetere, summo liber ius ei. 
+         Omnesque laboramus nam ne, ne vix nibh eros vidisse. Vim partem ignota et. 
+         In mea novum alterum noluisse, in sit sumo zril soluta, tale nonumy indoctum 
+         nam ne. No evertitur persecuti deterruisset est. No vel vivendum accusamus 
+         adversarium, eos vide ipsum eu. Diam tritani adversarium vim ex, ut ius docendi sententiae.
+      `,
+      move_in_date: "7/1/2022",
+      duration: "183",
+      home_type: "Condo"
+   },
+   {
+      blurb: `
+         Lorem ipsum dolor sit amet, an mutat fastidii vim. His ea quot mandamus 
+         dignissim, sed dolore euismod suavitate ei. Verterem pertinax id vis, 
+         qui at albucius suscipit. Vim alienum complectitur ad. Nec feugait 
+         accumsan definitionem ut.
+         Eum no noster facilis, usu cu partem postea appetere, summo liber ius ei. 
+         Omnesque laboramus nam ne, ne vix nibh eros vidisse. Vim partem ignota et. 
+         In mea novum alterum noluisse, in sit sumo zril soluta, tale nonumy indoctum 
+         nam ne. No evertitur persecuti deterruisset est. No vel vivendum accusamus 
+         adversarium, eos vide ipsum eu. Diam tritani adversarium vim ex, ut ius docendi sententiae.
+      `,
+      move_in_date: "6/28/2022",
+      duration: "243",
+      home_type: "Apartment"
+   },
+   {
+      blurb: `
+         Lorem ipsum dolor sit amet, an mutat fastidii vim. His ea quot mandamus 
+         dignissim, sed dolore euismod suavitate ei. Verterem pertinax id vis, 
+         qui at albucius suscipit. Vim alienum complectitur ad. Nec feugait 
+         accumsan definitionem ut.
+         Eum no noster facilis, usu cu partem postea appetere, summo liber ius ei. 
+         Omnesque laboramus nam ne, ne vix nibh eros vidisse. Vim partem ignota et. 
+         In mea novum alterum noluisse, in sit sumo zril soluta, tale nonumy indoctum 
+         nam ne. No evertitur persecuti deterruisset est. No vel vivendum accusamus 
+         adversarium, eos vide ipsum eu. Diam tritani adversarium vim ex, ut ius docendi sententiae.
+      `,
+      move_in_date: "5/29/2022",
+      duration: "213",
+      home_type: "House"
+   },
+   {
+      blurb: `
+         Lorem ipsum dolor sit amet, an mutat fastidii vim. His ea quot mandamus 
+         dignissim, sed dolore euismod suavitate ei. Verterem pertinax id vis, 
+         qui at albucius suscipit. Vim alienum complectitur ad. Nec feugait 
+         accumsan definitionem ut.
+         Eum no noster facilis, usu cu partem postea appetere, summo liber ius ei. 
+         Omnesque laboramus nam ne, ne vix nibh eros vidisse. Vim partem ignota et. 
+         In mea novum alterum noluisse, in sit sumo zril soluta, tale nonumy indoctum 
+         nam ne. No evertitur persecuti deterruisset est. No vel vivendum accusamus 
+         adversarium, eos vide ipsum eu. Diam tritani adversarium vim ex, ut ius docendi sententiae.
+      `,
+      move_in_date: "10/28/2022",
+      duration: "365",
+      home_type: "Condo"
+   },
+   {
+      blurb: `
+         Lorem ipsum dolor sit amet, an mutat fastidii vim. His ea quot mandamus 
+         dignissim, sed dolore euismod suavitate ei. Verterem pertinax id vis, 
+         qui at albucius suscipit. Vim alienum complectitur ad. Nec feugait 
+         accumsan definitionem ut.
+         Eum no noster facilis, usu cu partem postea appetere, summo liber ius ei. 
+         Omnesque laboramus nam ne, ne vix nibh eros vidisse. Vim partem ignota et. 
+         In mea novum alterum noluisse, in sit sumo zril soluta, tale nonumy indoctum 
+         nam ne. No evertitur persecuti deterruisset est. No vel vivendum accusamus 
+         adversarium, eos vide ipsum eu. Diam tritani adversarium vim ex, ut ius docendi sententiae.
+      `,
+      move_in_date: "9/28/2022",
+      duration: "365",
+      home_type: "Apartment"
+   },
+   {
+      blurb: `
+         Lorem ipsum dolor sit amet, an mutat fastidii vim. His ea quot mandamus 
+         dignissim, sed dolore euismod suavitate ei. Verterem pertinax id vis, 
+         qui at albucius suscipit. Vim alienum complectitur ad. Nec feugait 
+         accumsan definitionem ut.
+         Eum no noster facilis, usu cu partem postea appetere, summo liber ius ei. 
+         Omnesque laboramus nam ne, ne vix nibh eros vidisse. Vim partem ignota et. 
+         In mea novum alterum noluisse, in sit sumo zril soluta, tale nonumy indoctum 
+         nam ne. No evertitur persecuti deterruisset est. No vel vivendum accusamus 
+         adversarium, eos vide ipsum eu. Diam tritani adversarium vim ex, ut ius docendi sententiae.
+      `,
+      move_in_date: "5/28/2022",
+      duration: "365",
+      home_type: "Apartment"
+   }
+];
+
+const openDbConnection = async () => {
    let client = await OrientDBClient.connect({
      host: "localhost",
      port: 2424
@@ -266,7 +403,7 @@ openDbConnection = async () => {
    return db;
 }
 
-deleteNodesFromClass = async (db) => {
+const deleteNodesFromClass = async (db) => {
    try {
       let result = await db.command("DELETE VERTEX FROM User").all();
       console.log(result);
@@ -276,12 +413,16 @@ deleteNodesFromClass = async (db) => {
       console.log(result);
       result = await db.command("DELETE VERTEX FROM PersonalData").all();
       console.log(result);
+      result = await db.command("DELETE VERTEX FROM Spec").all();
+      console.log(result);
+      result = await db.command("DELETE VERTEX FROM Description").all();
+      console.log(result);
    } catch (err) {
       console.log(err)
    }
 }
 
-initializeDb = async () => {
+const initializeDb = async () => {
    let client = await OrientDBClient.connect({
      host: "localhost",
      port: 2424
@@ -376,14 +517,16 @@ initializeDb = async () => {
             CREATE VERTEX Spec SET
                sqrft=:sqrft,
                bedrooms=:bedrooms,
-               bathrooms=:bathrooms
+               bathrooms=:bathrooms,
+               price=:price
          `;
          let nodeResult = await db.command(nodeCommand, 
          {
             params: {
                sqrft: Number(specs[i].sqrft),
                bedrooms: Number(specs[i].bedrooms),
-               bathrooms: Number(specs[i].bathrooms)
+               bathrooms: Number(specs[i].bathrooms),
+               price: Number(specs[i].price)
          }}).all();
 
          let edgeResult = await db.command('CREATE EDGE has FROM '+placeRids[i]+' TO '+ridToString(nodeResult[0]['@rid'])).all();
@@ -434,6 +577,30 @@ initializeDb = async () => {
          let edgeResult = await db.command('CREATE EDGE has FROM '+userRids[i%3]+' TO '+personalRid).all();
       }
 
+      let descriptionRids = [];
+      // Create Description nodes and edges from places
+      for (let i = 0; i < descriptions.length; i++) {
+         let nodeCommand = `
+            CREATE VERTEX Description SET
+               blurb=:blurb,
+               move_in_date=:move_in_date,
+               duration=:duration,
+               home_type=:home_type
+         `;
+         let nodeResult = await db.command(nodeCommand, 
+         {
+            params: {
+               blurb: descriptions[i].blurb.toUpperCase(),
+               move_in_date: Date(descriptions[i].move_in_date),
+               duration: Number(descriptions[i].duration),
+               home_type: descriptions[i].home_type.toUpperCase()
+         }}).all();
+
+         let edgeResult = await db.command('CREATE EDGE has FROM '+placeRids[i]+' TO '+ridToString(nodeResult[0]['@rid'])).all();
+
+         descriptionRids.push(ridToString(nodeResult[0]['@rid']));
+      }
+
       if (userRids.length == 3) {
          console.log('User nodes successfully created.');
       }
@@ -464,6 +631,12 @@ initializeDb = async () => {
       else {
          console.log(personalRids.length + ' of 9 PersonalData nodes created.');
       }
+      if (descriptionRids.length == 8) {
+         console.log('Description nodes successfully created.');
+      }
+      else {
+         console.log(descriptionRids.length + ' of 8 Description nodes created.');
+      }
 
 
    } catch (err) {
@@ -475,7 +648,7 @@ initializeDb = async () => {
    client.close();
 }
 
-closeServer = async (server) => {
+const closeServer = async (server) => {
    await server.close();
    console.log('Server Closed.')
 }
@@ -483,14 +656,3 @@ closeServer = async (server) => {
 
 initializeDb();
 
-
-
-// const initialize = async () => {
-//     let client, pool = await createConnectionPool();
-//     let session = await pool.acquire();
-
-//     await session.close();
-//     closeConnectionPool(client, pool);
-// }
-
-// initialize();

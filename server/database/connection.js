@@ -1,29 +1,24 @@
-const OrientDBClient = require("orientjs").OrientDBClient;
+import pkg from 'orientjs';
+const { OrientDBClient } = pkg;
+
 
 /**
  * Creates an OrientDB connection
  * @returns (pool)
  */
-createConnectionPool = async () => {
+export const createConnectionPool = async () => {
     let client = await OrientDBClient.connect({
-        host: "localhost",
-        port: 2424
+      host: "localhost",
+      port: 2424
     });
 
     console.log("Connected to OrientDB Client...")
 
-    // let pool = await client.sessions({
-    //     name: "Sublet",
-    //     username: "root",
-    //     password: "qS>kv@wq+.L9u9*",
-    //     pool: { max: 10 }
-    // });
-
     let pool = await client.sessions({
-        name: "Sublet",
-        username: "root",
-        password: "root",
-        pool: { max: 10 }
+      name: "Sublet",
+      username: "root",
+      password: "root",
+      pool: { max: 10 }
     });
 
     console.log("OrientDB Connection Pool Open...")
@@ -31,12 +26,19 @@ createConnectionPool = async () => {
     return client, pool;
 }
 
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+export const waitForDbConnection = async () => {
+    await sleep(100000);
+    console.log('OrientDB Pool Connected.')
+}
+
 /**
  * Closes an OrientDB connection
  * @param {*} client the orientDB client to close
  * @param {*} pool the orientDB pool to close
  */
-closeConnectionPool = async (client, pool) => {
+export const closeConnectionPool = async (client, pool) => {
     
     console.log("Closing OrientDB Pool...")
     await pool.close();
@@ -46,6 +48,3 @@ closeConnectionPool = async (client, pool) => {
     await client.close();
     console.log("OrientDB Client Closed.")
 }
-
-module.exports.createConnectionPool = createConnectionPool;
-module.exports.closeConnectionPool = closeConnectionPool;
