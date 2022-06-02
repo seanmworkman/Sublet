@@ -13,6 +13,7 @@ import {
 import { 
   Card, CardBody,
   Button,
+  Input
 } from 'reactstrap';
 
 import _ from "lodash";
@@ -20,6 +21,8 @@ import _ from "lodash";
 import NavBar from '../components/NavBar.js';
 
 import Footer from '../components/Footer.js';
+
+import '../components/Style/landing.css';
 
 // import { MapContainer, TileLayer, Popup, Marker } from 'react-leaflet'
 
@@ -34,7 +37,19 @@ client = new ApolloClient({
   
       this.state = {
         users: [],
-        places: []
+        places: [
+          {
+            address_line1: "",
+            address_line2: "",
+            city: "",
+            state: "",
+            zip_code: "",
+            sqrft: 0.0,
+            bedrooms: 0.0,
+            bathrooms: 0.0,
+            price: 0.0
+          }
+        ]
       };
     }
   
@@ -75,12 +90,55 @@ client = new ApolloClient({
     }
   
     render() {
+      const backgroundStyle={
+        backgroundImage: "url('/landing.png')",
+        height:'100vh',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        display: 'grid'
+      };
+      // const gridContainer = {
+      //   display: "grid",
+      //   gridTemplateColumns: "auto auto auto",
+      //   padding: "10px"
+      // }
+      // const gridItem = {
+      //   padding: "20px",
+      //   fontSize: "30px",
+      //   textAlign: "center"
+      // }
       return (
-        <div>            
-          <div id="container">
-            <NavBar />
-            
-            {this.state.places[0] != undefined ? (
+        <div style={backgroundStyle}>    
+                
+          <div className='container'>
+            {/* <NavBar /> */}
+            {/* <br />
+            <br />
+            <br /> */}
+            <div className='section1'>
+              <div className='left'>
+                <h1 style={{ fontSize: '4em', color: 'white' }}>FIND YOUR NEXT STAY!</h1>
+                <hr style={{ borderWidth: '5px' }}/>
+                <h1 style={{ fontSize: '3em', color: 'white' }}>
+                  Short. <br />
+                  Long. <br />
+                  or somewhere  in between. <br />
+                  we're here to help. <br />
+                </h1>
+              </div>
+              <div className='right2' style={{
+                marginTop: '35%'
+              }}>
+                <Input type='text' placeholder='Enter a City or Zip Code'
+                  style={{
+                    width: '85%',
+                    fontSize: '20px'
+                  }} />
+                  <button color="primary">SEARCH</button><br /><br />
+                  <Button>PERSONALIZE YOUR SEARCH</Button>
+              </div>
+            </div>
+            {/* {this.state.places[0] != undefined ? (
               <>
                 {this.state.places.map(key => {
                   return (
@@ -104,9 +162,10 @@ client = new ApolloClient({
                   )
                 })}
               </>
-            ) : null}
+            ) : null} */}
 
           </div>
+          
           <Footer />
         </div>
       );

@@ -118,7 +118,7 @@ class NavBar extends Component {
                 
             </ul>
 
-            <Modal isOpen={this.state.contactOpen} toggle={this.toggleContactOpen} scrollable={true} style={{ maxWidth: "80%" }} onClosed={() => this.setState({  })}>
+            {/* <Modal isOpen={this.state.contactOpen} toggle={this.toggleContactOpen} scrollable={true} style={{ maxWidth: "80%" }} onClosed={() => this.setState({  })}>
                 <ModalBody>
                     <div
                         style={{
@@ -168,7 +168,7 @@ class NavBar extends Component {
                       </Table>
                     </div>
                 </ModalBody>
-            </Modal>
+            </Modal> */}
           </div>
         );
     }

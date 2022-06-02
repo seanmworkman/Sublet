@@ -32,13 +32,13 @@
 .right {
     height: 100%;
     width: 50%;
-    padding-left: 20px;
+    padding-left: 30px;
     float: right;
 }
 
 .left {
     height: 100%;
-    width: 50%;
+    width: 40%;
     padding-right: 20px;
     float: left;
 }
@@ -54,8 +54,8 @@
 }
 
 .section1 {
-    margin-right: 15%;
-    margin-left: 15%;
+    margin-right: 40%;
+    margin-left: 10%;
     margin-top: 5%;
     height: 100%;
 }
@@ -71,7 +71,7 @@
 
 .right2 {
     width: 50%;
-    padding-left: 20px;
+    padding-left: 30px;
     float: right;
     text-align: center;
     display: flex;
