@@ -10,11 +10,15 @@ import {
   GET_ALL_USERS
 } from "../graphql/queries.js"
 
-import { 
-  Card, CardBody,
+import {
   Button,
-  Input
-} from 'reactstrap';
+  TextField,
+  Typography,
+  Modal,
+  Box,
+  MenuItem
+} from '@mui/material/';
+
 
 import _ from "lodash";
 
@@ -30,6 +34,82 @@ let client;
 client = new ApolloClient({
   uri: "http://127.0.0.1:4000/graphql"
 });
+
+const SIGN_IN = 0;
+const WFH = 1;
+const PERSONALITY = 2;
+const DRINKING = 3;
+const PETS = 3;
+const EXERCISE = 4;
+
+
+const BACKGROUND_STYLE = {
+  backgroundImage: "url('/landing.png')",
+  height:'100vh',
+  backgroundSize: 'cover',
+  backgroundRepeat: 'no-repeat',
+  display: 'grid'
+};
+const MODAL_STYLE = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+const yesNoSometimes = [
+  {
+    value: 'YES',
+    label: 'YES',
+  },
+  {
+    value: 'NO',
+    label: 'NO',
+  },
+  {
+    value: 'SOMETIMES',
+    label: 'SOMETIMES',
+  }
+];
+const yesNo = [
+  {
+    value: 'YES',
+    label: 'YES',
+  },
+  {
+    value: 'NO',
+    label: 'NO',
+  }
+];
+const introvertExtrovert = [
+  {
+    value: 'INTROVERT',
+    label: 'INTROVERT',
+  },
+  {
+    value: 'EXTROVERT',
+    label: 'EXTROVERT',
+  }
+];
+const petSizes = [
+  {
+    value: 'SMALL',
+    label: 'SMALL',
+  },
+  {
+    value: 'MEDIUM',
+    label: 'MEDIUM',
+  },
+  {
+    value: 'LARGE',
+    label: 'LARGE',
+  }
+];
 
  class Landing extends Component {
     constructor(props) {
@@ -49,7 +129,26 @@ client = new ApolloClient({
             bathrooms: 0.0,
             price: 0.0
           }
-        ]
+        ],
+        personalDataOpen: false,
+        personalDataPage: SIGN_IN,
+
+        // Sign in values
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+
+        // Personal Data values
+        workFromHome: '',
+        drinking: '',
+        pets: '',
+        petSize: '',
+        personality: '',
+        exercise: '',
+
+        // Search
+        searchInput: ''
       };
     }
   
@@ -88,27 +187,264 @@ client = new ApolloClient({
         console.log(JSON.stringify(err, null, 2));
       }
     }
+
+    togglePersonalDataOpen = () => {
+      if (this.state.personalDataOpen) {
+        this.setState({
+          personalDataPage: SIGN_IN,
+  
+          // Sign in values
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+  
+          // Personal Data values
+          workFromHome: '',
+          drinking: '',
+          pets: '',
+          petSize: '',
+          personality: '',
+          exercise: ''
+        });
+      }
+      this.setState({
+        personalDataOpen: !this.state.personalDataOpen
+      });
+    }
+
+    signInDisabled = () => {
+      let x = this.state;
+      return (x.firstName == '' || x.lastName == '' || x.email == '' || x.phone == '')
+    }
+
+    searchDisabled = () => {
+      let x = this.state;
+      return (x.searchInput == '')
+    }
+
+    savePersonalData = async () => {
+      this.togglePersonalDataOpen();
+
+
+
+      this.setState({
+        personalDataPage: SIGN_IN,
+
+        // Sign in values
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+
+        // Personal Data values
+        workFromHome: '',
+        drinking: '',
+        pets: '',
+        petSize: '',
+        personality: '',
+        exercise: ''
+      });
+    }
+
+    search = async () => {
+      
+    }
+
+    getPersonalDataPage = () => {
+      switch (this.state.personalDataPage) {
+        case SIGN_IN:
+          return (
+            <Box sx={MODAL_STYLE}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Tell us who you are
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <TextField label="First Name" value={this.state.firstName} style={{ width: '40%' }}
+                  onChange={(e) => {this.setState({ firstName: e.target.value })}}
+                /><br />
+                <TextField label="Last Name" value={this.state.lastName} style={{ width: '40%' }}
+                  onChange={(e) => {this.setState({ lastName: e.target.value })}}
+                /><br />
+                <TextField label="Email" value={this.state.email} style={{ width: '40%' }}
+                  onChange={(e) => {this.setState({ email: e.target.value })}}
+                /><br />
+                <TextField label="Phone" value={this.state.phone} style={{ width: '40%' }}
+                  onChange={(e) => {this.setState({ phone: e.target.value })}}
+                /><br />
+                <Button variant="contained" style={{
+                    float: 'right'
+                  }}
+                  disabled={this.signInDisabled()}
+                  onClick={() => this.setState({ personalDataPage: this.state.personalDataPage + 1 })}
+                >NEXT</Button>
+              </Typography>
+            </Box>
+          )
+        case WFH:
+          return (
+            <Box sx={MODAL_STYLE}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Do you work from home?
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <TextField
+                  select
+                  label="Select"
+                  value={this.state.workFromHome}
+                  onChange={(e) => {this.setState({ workFromHome: e.target.value })}}
+                  style={{ width: '40%' }}
+                >
+                  {yesNoSometimes.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField><br />
+                <Button variant="contained" style={{
+                    float: 'right'
+                  }}
+                  onClick={() => this.setState({ personalDataPage: this.state.personalDataPage + 1 })}
+                >NEXT</Button>
+              </Typography>
+            </Box>
+          )
+        case PERSONALITY:
+          return (
+            <Box sx={MODAL_STYLE}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                What's your personality?
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <TextField
+                  select
+                  label="Select"
+                  value={this.state.personality}
+                  onChange={(e) => {this.setState({ personality: e.target.value })}}
+                  style={{ width: '40%' }}
+                >
+                  {introvertExtrovert.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField><br />
+                <Button variant="contained" style={{
+                    float: 'right'
+                  }}
+                  onClick={() => this.setState({ personalDataPage: this.state.personalDataPage + 1 })}
+                >NEXT</Button>
+              </Typography>
+            </Box>
+          )
+        case PETS:
+          return (
+            <Box sx={MODAL_STYLE}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Do/Will you have pets?
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <TextField
+                  select
+                  label="Select"
+                  value={this.state.pets}
+                  onChange={(e) => {this.setState({ pets: e.target.value })}}
+                  style={{ width: '40%' }}
+                >
+                  {yesNo.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField><br />
+                {this.state.pets == 'YES' && 
+                <>
+                  <h3>What size pet do you have?</h3>
+                  <TextField
+                    select
+                    label="Select"
+                    value={this.state.petSize}
+                    onChange={(e) => {this.setState({ petSize: e.target.value })}}
+                    style={{ width: '40%' }}
+                  >
+                    {petSizes.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField><br />
+                </>}
+                <Button variant="contained" style={{
+                    float: 'right'
+                  }}
+                  onClick={() => this.setState({ personalDataPage: this.state.personalDataPage + 1 })}
+                >NEXT</Button>
+              </Typography>
+            </Box>
+          )
+        case DRINKING:
+          return (
+            <Box sx={MODAL_STYLE}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Do you like to go out on the weekends?
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <TextField
+                  select
+                  label="Select"
+                  value={this.state.drinking}
+                  onChange={(e) => {this.setState({ drinking: e.target.value })}}
+                  style={{ width: '40%' }}
+                >
+                  {yesNoSometimes.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField><br />
+                <Button variant="contained" style={{
+                    float: 'right'
+                  }}
+                  onClick={() => this.setState({ personalDataPage: this.state.personalDataPage + 1 })}
+                >NEXT</Button>
+              </Typography>
+            </Box>
+          )
+        case EXERCISE:
+          return (
+            <Box sx={MODAL_STYLE}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Do you like to exercise?
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <TextField
+                  select
+                  label="Select"
+                  value={this.state.exercise}
+                  onChange={(e) => {this.setState({ exercise: e.target.value })}}
+                  style={{ width: '40%' }}
+                >
+                  {yesNoSometimes.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField><br />
+                <Button variant="contained" style={{
+                    float: 'right'
+                  }}
+                  onClick={() => this.savePersonalData()}
+                >SAVE</Button>
+              </Typography>
+            </Box>
+          )
+      }
+    }
   
     render() {
-      const backgroundStyle={
-        backgroundImage: "url('/landing.png')",
-        height:'100vh',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        display: 'grid'
-      };
-      // const gridContainer = {
-      //   display: "grid",
-      //   gridTemplateColumns: "auto auto auto",
-      //   padding: "10px"
-      // }
-      // const gridItem = {
-      //   padding: "20px",
-      //   fontSize: "30px",
-      //   textAlign: "center"
-      // }
+      
       return (
-        <div style={backgroundStyle}>    
+        <div style={BACKGROUND_STYLE}>    
                 
           <div className='container'>
             {/* <NavBar /> */}
@@ -125,47 +461,34 @@ client = new ApolloClient({
                   or somewhere  in between. <br />
                   we're here to help. <br />
                 </h1>
+                
               </div>
               <div className='right2' style={{
                 marginTop: '35%'
               }}>
-                <Input type='text' placeholder='Enter a City or Zip Code'
+                <TextField id="filled-basic" label="City or zip code" variant="filled"
                   style={{
                     width: '85%',
-                    fontSize: '20px'
-                  }} />
-                  <button color="primary">SEARCH</button><br /><br />
-                  <Button>PERSONALIZE YOUR SEARCH</Button>
+                    fontSize: '20px',
+                    backgroundColor: 'white'
+                  }} 
+                  value={this.state.searchInput}
+                  onChange={(e) => this.setState({ searchInput: e.target.value })}
+                />
+                  <Button variant="contained" onClick={() => this.search()} disabled={this.searchDisabled()}>SEARCH</Button><br /><br />
+                  <Button variant="contained" onClick={() => this.togglePersonalDataOpen()}>PERSONALIZE YOUR SEARCH</Button>
               </div>
             </div>
-            {/* {this.state.places[0] != undefined ? (
-              <>
-                {this.state.places.map(key => {
-                  return (
-                    <Card>
-                      <CardBody>
-                        {this.state.places[key].address_line1}<br />
-                        {this.state.places[key].address_line2}<br />
-                        {this.state.places[key].city},
-                        {this.state.places[key].state}
-                        {this.state.places[key].zip_code}
-                        Specs:<br />
-                        {this.state.places[key].sqrft} sqrft<br />
-                        {this.state.places[key].bedrooms} bedrooms<br />
-                        {this.state.places[key].bathrooms} bathrooms<br />
-                        <h3>${this.state.places[key].price}</h3>
-                        <Button>
-                          Button
-                        </Button>
-                      </CardBody>
-                    </Card>
-                  )
-                })}
-              </>
-            ) : null} */}
-
+            
           </div>
-          
+          <Modal
+            open={this.state.personalDataOpen}
+            onClose={this.togglePersonalDataOpen}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            {this.getPersonalDataPage()}
+          </Modal>
           <Footer />
         </div>
       );
