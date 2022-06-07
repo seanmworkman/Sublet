@@ -37,6 +37,22 @@ export const GET_ALL_PLACES_WITH_SPECS = gql`
   }
 `;
 
+export const GET_PLACE_SEARCH_RESULT = gql`
+  query getPlaceSearchResult($searchInput: String, $personalData: [PersonalDataInput], $userInfo: UserInput) {
+    getPlaceSearchResult(searchInput: $searchInput, personalData: $personalData, userInfo: $userInfo) {
+      address_line1
+      address_line2
+      city
+      state
+      zip_code
+      sqrft
+      bedrooms
+      bathrooms
+      price
+    }
+  }
+`;
+
 export const READ_USER_LOGIN = gql`
   query ReadUserLogin($id: String!) {
     userLogin(id: $id) {

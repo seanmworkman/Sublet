@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import ApolloClient, { InMemoryCache } from 'apollo-boost'
 import { ApolloProvider } from '@apollo/react-hooks';
 
 import App from './App';
+import Landing from './views/Landing';
+import Places from './views/Places';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
@@ -22,7 +25,13 @@ const root = createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <HashRouter>
+        <Routes>
+          <Route exact path="/" name="Default Landing Page" element={<App />} />
+          <Route exact path="/Landing" name="Landing" element={<Landing />} />
+          <Route exact path="/Places" name="Places" element={<Places />} />
+        </Routes>
+      </HashRouter>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')

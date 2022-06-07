@@ -7,7 +7,8 @@ import ApolloClient from "apollo-boost";
 // import { InMemoryCache, ApolloClient } from '@apollo/client';
 import {
   GET_ALL_PLACES_WITH_SPECS,
-  GET_ALL_USERS
+  GET_ALL_USERS,
+  GET_PLACE_SEARCH_RESULT
 } from "../graphql/queries.js"
 
 import {
@@ -18,7 +19,6 @@ import {
   Box,
   MenuItem
 } from '@mui/material/';
-
 
 import _ from "lodash";
 
@@ -39,9 +39,8 @@ const SIGN_IN = 0;
 const WFH = 1;
 const PERSONALITY = 2;
 const DRINKING = 3;
-const PETS = 3;
-const EXERCISE = 4;
-
+const PETS = 4;
+const EXERCISE = 5;
 
 const BACKGROUND_STYLE = {
   backgroundImage: "url('/landing.png')",
@@ -133,6 +132,9 @@ const petSizes = [
         personalDataOpen: false,
         personalDataPage: SIGN_IN,
 
+        userInfo: {},
+        personalData: {},
+
         // Sign in values
         firstName: '',
         lastName: '',
@@ -140,6 +142,7 @@ const petSizes = [
         phone: '',
 
         // Personal Data values
+        personalized: false,
         workFromHome: '',
         drinking: '',
         pets: '',
@@ -154,8 +157,53 @@ const petSizes = [
   
     componentDidMount() {
       window.scrollTo(0, 0);
-      this.getAllUsers();
-      this.getAllPlaces();
+      // console.log(window.sessionStorage.getItem("key"))
+      // this.getAllUsers();
+      // this.getAllPlaces();
+      let personalData = [];
+      personalData.push(
+        {
+          category: "WORK FROM HOME",
+          answer: this.state.workFromHome
+        },
+        {
+          category: "DRINKING",
+          answer: this.state.drinking
+        },
+        {
+          category: "PETS",
+          answer: this.state.pets
+        },
+        {
+          category: "PET SIZE",
+          answer: this.state.petSize
+        },
+        {
+          category: "PERSONALITY",
+          answer: this.state.personality
+        },
+        {
+          category: "EXERCISE",
+          answer: this.state.exercise
+        }
+      );
+
+      let userInfo = {
+        first_name: this.state.firstName,
+        last_name: this.state.lastName,
+        email: this.state.email,
+        phone: this.state.phone
+      }
+
+      this.setState({
+        personalized: true,
+        personalData: personalData,
+        userInfo: userInfo
+      });
+    }
+
+    tryPlaces = () => {
+      window.location.href = '/#/Places';
     }
 
     getAllUsers = async () => {
@@ -226,7 +274,48 @@ const petSizes = [
     savePersonalData = async () => {
       this.togglePersonalDataOpen();
 
+      let personalData = [];
+      personalData.push(
+        {
+          category: "WORK FROM HOME",
+          answer: this.state.workFromHome
+        },
+        {
+          category: "DRINKING",
+          answer: this.state.drinking
+        },
+        {
+          category: "PETS",
+          answer: this.state.pets
+        },
+        {
+          category: "PET SIZE",
+          answer: this.state.petSize
+        },
+        {
+          category: "PERSONALITY",
+          answer: this.state.personality
+        },
+        {
+          category: "EXERCISE",
+          answer: this.state.exercise
+        }
+      );
 
+      let userInfo = {
+        first_name: this.state.firstName,
+        last_name: this.state.lastName,
+        email: this.state.email,
+        phone: this.state.phone
+      }
+
+      window.sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+
+      this.setState({
+        personalized: true,
+        personalData: personalData,
+        userInfo: userInfo
+      });
 
       this.setState({
         personalDataPage: SIGN_IN,
@@ -248,7 +337,26 @@ const petSizes = [
     }
 
     search = async () => {
-      
+      try {
+        console.log('searchInput: ', this.state.searchInput)
+        console.log('personalData: ', this.state.personalData)
+        console.log('userInfo: ', this.state.userInfo)
+        let res = await client.query({
+          query: GET_PLACE_SEARCH_RESULT,
+          variables: {
+            searchInput: this.state.searchInput,
+            personalData: this.state.personalData,
+            userInfo: this.state.userInfo
+          },
+          fetchPolicy: 'network-only'
+        });
+
+        console.log('searchResult', res.data.getPlaceSearchResult);
+        window.sessionStorage.setItem("placeSearchResult", JSON.stringify(res.data.getPlaceSearchResult));
+        this.tryPlaces();
+      } catch (err) {
+        console.log(JSON.stringify(err, null, 2));
+      }
     }
 
     getPersonalDataPage = () => {
@@ -458,8 +566,8 @@ const petSizes = [
                 <h1 style={{ fontSize: '3em', color: 'white' }}>
                   Short. <br />
                   Long. <br />
-                  or somewhere  in between. <br />
-                  we're here to help. <br />
+                  Or somewhere  in between. <br />
+                  We're here to help. <br />
                 </h1>
                 
               </div>

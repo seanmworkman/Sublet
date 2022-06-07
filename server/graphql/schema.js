@@ -8,6 +8,13 @@ export const typeDefs = gql`
     email: String
   }
 
+  input UserInput {
+    first_name: String
+    last_name: String
+    phone: String
+    email: String
+  }
+
   type Place {
     address_line1: String
     address_line2: String
@@ -20,9 +27,15 @@ export const typeDefs = gql`
     price: Float
   }
 
+  input PersonalDataInput {
+    category: String
+    answer: String
+  }
+
   type Query {
     users: [User]
     getAllUsers: [User]
     getAllPlacesWithSpecs: [Place]
+    getPlaceSearchResult(searchInput: String, personalData: [PersonalDataInput], userInfo: UserInput): [Place]
   }
 `

@@ -2,7 +2,8 @@
 import { 
     users,
     getAllUsers,
-    getAllPlacesWithSpecs
+    getAllPlacesWithSpecs,
+    getPlaceSearchResult
   } from './loaders.js';
   
   // All resolvers used for queries/mutations 
@@ -11,7 +12,8 @@ import {
     Query: {
       users,
       getAllUsers,
-      getAllPlacesWithSpecs
+      getAllPlacesWithSpecs,
+      getPlaceSearchResult
     }
     
   };

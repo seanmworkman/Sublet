@@ -7,7 +7,9 @@ import Landing from './views/Landing';
 
 
 class App extends Component {
-
+  componentDidMount() {
+    window.sessionStorage.setItem("key", "value");
+  }
   render() {
     return (
       <div > 
